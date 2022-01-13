@@ -28,10 +28,12 @@ brew 'git-delta'
 brew 'git-flow'
 brew 'git-open'
 brew 'git'
+brew 'glslviewer'
 brew 'gnu-sed'
 brew 'gnu-which'
 brew 'gnupg'
 brew 'grep'
+brew 'haxe'
 brew 'htop'
 brew 'httpie'
 brew 'java'
@@ -39,6 +41,7 @@ brew 'jenv'
 brew 'jq'
 brew 'less'
 brew 'mackup'
+brew 'mailhog', restart_service: true
 brew 'mas'
 brew 'nvm'
 # brew 'php@8.0'
@@ -59,6 +62,7 @@ brew 'vim'
 brew 'wget'
 brew 'wrk'
 brew 'yarn'
+brew 'youtube-dl'
 brew 'z'
 brew 'zlib'
 brew 'zsh-autosuggestions'
@@ -71,14 +75,12 @@ brew 'zsh'
 cask 'docker'
 cask 'firefox-developer-edition'
 cask 'google-chrome'
-cask 'imageoptim'
-cask 'kitty'
 # cask 'mongodb-compass'
 cask 'notion'
 cask 'postman'
 # cask 'phpmon'
 cask 'zoom'
-cask 'launchcontrol'
+cask 'quicklook-json'
 cask 'rectangle'
 cask 'visual-studio-code'
 cask 'vagrant'
@@ -101,64 +103,42 @@ cask 'font-dejavu'
 #
 # paid apps (license required)
 #
-cask 'helo'
 cask 'navicat-for-postgresql'
-cask 'pinegrow'
-cask 'postbox'
 cask 'gitkraken'
 cask 'tinkerwell'
-cask 'jetbrains-toolbox'
 cask 'typora'
 cask 'vmware-fusion'
 
-# work - mac app store 
+# work - mac app store
 mas '1Password 7', id: 1333542190
 mas 'Numbers', id: 409203825
 mas 'Pages', id: 409201541
-mas 'Pixelmator Pro', id: 1289583905
 mas 'Slack', id: 803453959
 mas 'Medis - GUI for Redis', id: 1063631769
-mas 'Apple Remote Desktop', id: 409907375  
-mas 'Eye-Friendly', id: 587769990
-mas 'Paste - Clipboard Manager', id: 967805235
-mas 'SQLiteFlow - SQLite Editor', id: 1378587993
+mas 'Apple Remote Desktop', id: 409907375
+# mas 'Paste - Clipboard Manager', id: 967805235 Using setapp
 
-mas 'Jump Desktop (RDP, VNC, Fluid)', id: 524141863
-mas 'SerialTools', id: 611021963    
+# mas 'Jump Desktop (RDP, VNC, Fluid)', id: 524141863 Using setapp
 
 
 # =========================================================
-#   home 
+#   home
 # =========================================================
 
 brew 'handbrake'
-
-mas 'ReadKit: Read Later and RSS', id: 588726889  
-mas 'Surfshark', id: 1437809329    
-mas 'WhatsApp Desktop', id: 1147396723
 
 # =========================================================
 #   home - paid apps
 # =========================================================
 
-cask 'shimo'      
-cask 'little-snitch'
-
-mas 'Affinity Photo', id: 824183456
+# cask 'shimo' Using setapp
 mas 'Affinity Designer', id: 824171161
-mas 'Gemini 2', id: 1090488118  
-
-mas 'DaisyDisk', id: 411643860  
-
-mas 'World Clock Pro', id: 858446756 
-mas 'HomePass for HomeKit', id: 1330266650  
-mas 'HomeCam for HomeKit', id: 1292995895
 
 # mas 'Banktivity', id: 1480779512
 # mas 'Controller for HomeKit', id: 1198176727
 # mas 'Home Assistant', id: 1099568401
 
-# 
+#
 # AppStore Account Switching - Manually Install from AppStore (other account)
 #       Having issues with shared apps amongst family members - app purchased against other accounts
 #
@@ -168,14 +148,14 @@ mas 'HomeCam for HomeKit', id: 1292995895
 # mas 'NetAdmin Pro', id: 675649574
 # mas 'Serial', id: 877615577
 # mas 'BarnQR', id:1059929763'
-# mas 'Patterns', id:429449079'   
+# mas 'Patterns', id:429449079'
 
-# mas 'Folx GO+', id: 823528286  
+# mas 'Folx GO+', id: 823528286
 # mas 'Transmit 5', id: 1436522307
 # mas 'Live Home 3D Pro: Design House', id: 1066145115
-# mas 'Entropy', id: 437151949   
+# mas 'Entropy', id: 437151949
 
-# SCREENSHOTING - TODO 
+# SCREENSHOTING - TODO
 # mas screenshotplus
 # https://cleanshot.com/pricing - possibly use setapp as its included there.
 
