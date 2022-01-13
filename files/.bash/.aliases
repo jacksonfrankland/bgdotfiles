@@ -37,6 +37,9 @@ alias nah='try nope - nah is too dangerous'
 # Recover with git reflog - Reset to last commit and remove untracked files and directories.
 alias nope='git reset --hard'
 
+# show git history visually
+alias gittree='git log --branches --remotes --tags --graph --pretty=format:"%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit --date=relative'
+
 # debug git
 alias git_debug="GIT_TRACE=true GIT_CURL_VERBOSE=true GIT_SSH_COMMAND=\"ssh -vvv\" GIT_TRACE_PACK_ACCESS=true GIT_TRACE_PACKET=true GIT_TRACE_PACKFILE=true GIT_TRACE_PERFORMANCE=true GIT_TRACE_SETUP=true GIT_TRACE_SHALLOW=true git $@"
 
@@ -59,10 +62,10 @@ alias subl=code # no sublime - vscode only
 alias shrug="echo '¯\_(ツ)_/¯' | pbcopy;echo '¯\_(ツ)_/¯'";
 
 
-# Defaults 
+# Defaults
 # Show/Hide hidden files in Finder
-alias showhidden='defaults write com.apple.finder AppleShowAllFiles TRUE && killall Finder'
-alias hidehidden='defaults write com.apple.finder AppleShowAllFiles FALSE && killall Finder'
+alias showhidden='echo "Use \"shift+cmd+.\" instead."'
+alias hidehidden='echo "Use \"shift+cmd+.\" instead."'
 
 
 # Force empty the trash
@@ -91,10 +94,10 @@ alias dock_prune='docker container prune'
 
 
 # Vagrant
-alias vagrant='HOMESTEADVM='\''centos'\'' vagrant' 
+alias vagrant='HOMESTEADVM='\''centos'\'' vagrant'
 alias vglob='vagrant global-status --prune 2>/dev/null | egrep -i --color=always "^.*$(pwd)[ ]*$|$"'
 alias vush='vagrant up && vssh'
-alias vnoprov='vagrant up --no-provision 2>&1 | grep -v VAGRANTFILE_API_VERSION | grep already && vagrant reload --no-provision' 
+alias vnoprov='vagrant up --no-provision 2>&1 | grep -v VAGRANTFILE_API_VERSION | grep already && vagrant reload --no-provision'
 #alias v_glob='vagrant global-status --prune 2>&1 | grep -v VAGRANTFILE_API_VERSION | egrep -i --color=always "^.*$(pwd).*$|$"'
 
 
@@ -106,7 +109,7 @@ alias nl='npm list --depth=0'
 alias switch_js='nvm'
 
 
-# PHP Laravel Valet 
+# PHP Laravel Valet
 alias sphp70='switch_php 7.0'
 alias sphp72='switch_php 7.2'
 alias sphp73='switch_php 7.3'
@@ -120,7 +123,7 @@ alias php_version='php -r "echo PHP_VERSION;" | cut -d. -f-2' # current php vers
 alias art='php artisan'
 alias artisan='php artisan'
 alias tinker='php artisan tinker'
-alias sail='bash vendor/bin/sail' # docker 
+alias sail='bash vendor/bin/sail' # docker
 
 # PhpUnit
 alias phpunit='/usr/local/bin/phpunit'
@@ -137,3 +140,6 @@ alias xdebug_restore='incpath=$(php --ini | grep "Scan for additional .ini files
 # PHPDeployer - https://deployer.org
 alias dep='vendor/bin/dep'                    # no global install - (composer 2 issue) - use project's vendor install.
 alias prov='APP_ENV=deployer dep -f=prov.php' # custom deployer command for provisioning
+
+# update xcode tools
+alias updatexcode='xcode-select --install'
