@@ -18,7 +18,9 @@ BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" # $HOME
 [ -r $BASEDIR/.aliases ] && source $BASEDIR/.aliases || true
 [ -r $BASEDIR/dotfiles/files/switch_php ] && source $BASEDIR/dotfiles/files/switch_php || true
 
-. /usr/local/etc/profile.d/z.sh
+if test -e "/usr/local/etc/profile.d/z.sh"; then
+    . /usr/local/etc/profile.d/z.sh
+fi
 
 # Add folder to search PATH if it exists
 for folder in $HOME/.yarn/bin $HOME/bin /usr/local/bin /usr/local/sbin;
