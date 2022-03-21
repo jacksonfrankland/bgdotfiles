@@ -60,7 +60,7 @@ brew 'shivammathur/php/php@8.1'
 brew 'skm'
 brew 'sqlite'
 brew 'starship'
-brew 'svn' # source-code-pro requires it
+# brew 'svn' # source-code-pro requires it
 brew 'tree'
 brew 'vagrant-completion'
 brew 'vim'
