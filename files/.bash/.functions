@@ -524,7 +524,7 @@ function enter_directory() {
 		return
 	fi
 	PREV_PWD=$PWD
-	[[ -f ".nvmrc" ]] && nvm use && read -p "updage npm Yn ?" upg && test "${upg:-n}" == "Y" && nvm install-latest-npm || true
+	[[ -f ".nvmrc" ]] && nvm use
      # Use correct node version AND use latest compatible NPM
 }
 
