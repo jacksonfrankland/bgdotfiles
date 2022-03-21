@@ -54,6 +54,10 @@ export PGUSER="${PGUSER:-postgres}"
 export PGDATABASE="${PGDATABASE:-postgres}"
 export PGVERSION="${PGVERSION:-9.5}" # this is not a standard PG ENV VAR
 
+# Themes
+
+export BAT_THEME="GitHub"
+
 # =============================================================================
 
 # Developer Workspace

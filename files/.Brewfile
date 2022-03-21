@@ -20,6 +20,7 @@ brew 'bat'
 brew 'composer'
 brew 'coreutils'
 brew 'dnsmasq'
+brew 'docutils'
 brew 'exa'
 brew 'fd'
 brew 'findutils'
@@ -52,6 +53,8 @@ brew 'redis'
 brew 'ripgrep'
 brew 'shellcheck'
 brew 'shivammathur/php/php@7.0'
+brew 'shivammathur/php/php@7.2'
+brew 'shivammathur/php/php@7.4'
 brew 'shivammathur/php/php@8.0'
 brew 'shivammathur/php/php@8.1'
 brew 'skm'
@@ -81,7 +84,7 @@ cask 'google-chrome'
 # cask 'mongodb-compass'
 cask 'notion'
 cask 'postman'
-# cask 'phpmon'
+cask 'phpmon'
 cask 'zoom'
 cask 'quicklook-json'
 cask 'rectangle'
@@ -89,6 +92,10 @@ cask 'visual-studio-code'
 cask 'vagrant'
 # cask 'vagrant-manager'
 cask 'vlc'
+cask 'microsoft-teams'
+cask 'obsidian'
+cask 'raspberry-pi-imager'
+cask 'vnc-viewer'
 
 # fonts
 cask 'font-jetbrains-mono' # may not be required given jetbrains-toolbox install
@@ -107,6 +114,9 @@ cask 'font-dejavu'
 # paid apps (license required)
 #
 cask 'navicat-for-postgresql'
+cask 'cleanshot'
+cask 'pinegrow'
+cask 'postbox'
 cask 'gitkraken'
 cask 'tinkerwell'
 cask 'typora'
@@ -119,9 +129,14 @@ mas 'Pages', id: 409201541
 mas 'Slack', id: 803453959
 mas 'Medis - GUI for Redis', id: 1063631769
 mas 'Apple Remote Desktop', id: 409907375
-# mas 'Paste - Clipboard Manager', id: 967805235 Using setapp
+mas 'Eye-Friendly', id: 587769990
+mas 'Paste - Clipboard Manager', id: 967805235
+mas 'SQLiteFlow - SQLite Editor', id: 1378587993
 
-# mas 'Jump Desktop (RDP, VNC, Fluid)', id: 524141863 Using setapp
+mas 'Jump Desktop (RDP, VNC, Fluid)', id: 524141863
+mas 'SerialTools', id: 611021963
+
+
 
 
 # =========================================================
@@ -130,12 +145,27 @@ mas 'Apple Remote Desktop', id: 409907375
 
 brew 'handbrake'
 
+mas 'ReadKit: Read Later and RSS', id: 588726889
+mas 'Surfshark', id: 1437809329
+mas 'WhatsApp Desktop', id: 1147396723
+
 # =========================================================
 #   home - paid apps
 # =========================================================
 
-# cask 'shimo' Using setapp
+cask 'shimo'
+cask 'little-snitch'
+cask 'handbrake'
+
+mas 'Affinity Photo', id: 824183456
 mas 'Affinity Designer', id: 824171161
+mas 'Gemini 2', id: 1090488118
+
+mas 'DaisyDisk', id: 411643860
+
+mas 'World Clock Pro', id: 858446756
+mas 'HomePass for HomeKit', id: 1330266650
+mas 'HomeCam for HomeKit', id: 1292995895
 
 # mas 'Banktivity', id: 1480779512
 # mas 'Controller for HomeKit', id: 1198176727

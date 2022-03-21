@@ -170,13 +170,24 @@ function sshrem() {
 	echo -e "\n>> removing '$s'";
 	for khfile in $(find ~/.ssh -regex '.*known_hosts[0-9]*$')
 		do
-			target_server="${s}"
-			target_server_ip=$(dig +search +short ${target_server})
-			target_server_shortname=$(echo ${target_server} | cut -d. -f1)
-			echo "Scanning : ${khfile} for '${target_server}', '${target_server_ip}', '${target_server_shortname}'"
-			ssh-keygen -R ${target_server} -f ${khfile} &>/dev/null && echo "success removed $target_server" || echo "problem removing $target_server"
-			ssh-keygen -R ${target_server_ip} -f ${khfile} &>/dev/null && echo "success removed $target_server_ip" || echo "problem removing $target_server_ip"
-			ssh-keygen -R ${target_server_shortname} -f ${khfile} &>/dev/null && echo "success removed $target_server_shortname" || echo "problem removing $target_server_shortname"
+            if [[ $ip =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+                # ip-address
+                ssh-keygen -R "${s}" -f ${khfile} &>/dev/null && echo "success removed $target_server" || echo "problem removing $target_server"
+            else
+                target_server="${s}"
+                target_server_ip=$(dig +search +short ${target_server})
+                target_server_shortname=$(echo ${target_server} | cut -d. -f1)
+
+                echo "Scanning : ${khfile} for '${target_server}'"
+
+                ssh-keygen -R ${target_server} -f ${khfile} &>/dev/null && echo "success removed $target_server" || echo "problem removing $target_server"
+                if [ ! -z "$target_server_ip" ]; then
+                    ssh-keygen -R ${target_server_ip} -f ${khfile} &>/dev/null && echo "success removed $target_server_ip" || echo "problem removing $target_server_ip"
+                fi
+                if [ ! -z "$target_server_ip" ]; then
+                    ssh-keygen -R ${target_server_shortname} -f ${khfile} &>/dev/null && echo "success removed $target_server_shortname" || echo "problem removing $target_server_shortname"
+                fi
+            fi
 		done
 	done
 }
@@ -240,11 +251,11 @@ function js_env_install() {
 
 function clearall() {
     [ ! -e ./artisan ] && echo "no artisan" && return
-    artisan cache:clear
-    artisan config:clear
-    artisan route:clear
-    [ "$1" == 'oc' ] && artisan opcache:clear || echo -e "Skipping: artisan opcache:clear ( use argument 'oc' ) "
-    artisan optimize
+    php artisan cache:clear
+    php artisan config:clear
+    php artisan route:clear
+    [ "$1" == 'oc' ] && php artisan opcache:clear || echo -e "Skipping: artisan opcache:clear ( use argument 'oc' ) "
+    php artisan optimize
 }
 
 # TODO - move to autocomplete section
@@ -492,7 +503,8 @@ function launchVM() {
 }
 
 function clear_dns_cache() {
-	[ "$(uname)" == 'Darwin' ] && {
+
+    [ "$(uname)" == 'Darwin' ] && {
         sudo dscacheutil -flushcache
         sudo killall -HUP mDNSResponder
         echo "cleared"
@@ -506,12 +518,76 @@ function fixpsql() {
 	brew services start postgresql@9.5;
 }
 
-# Use correct node version
-enter_directory() {
+function enter_directory() {
+
 	if [[ $PWD == $PREV_PWD ]]; then
 		return
 	fi
-
 	PREV_PWD=$PWD
-	[[ -f ".nvmrc" ]] && nvm use
+	[[ -f ".nvmrc" ]] && nvm use && read -p "updage npm Yn ?" upg && test "${upg:-n}" == "Y" && nvm install-latest-npm || true
+     # Use correct node version AND use latest compatible NPM
 }
+
+
+function pghashlib_install() {
+
+    brew install docutils # provides rst2html command
+    cd /tmp && \
+    wget --quiet https://github.com/markokr/pghashlib/archive/master.zip -O pghashlib.zip && \
+    unzip pghashlib.zip && \
+    pushd pghashlib-master && \
+    make && \
+    make install && \
+    popd && \
+    rm -rf pghashlib-master && \
+    rm -f pghashlib.zip
+}
+
+
+# https://gist.githubusercontent.com/nachoparker/c93a8675ba9a93bc5f422b060561a169/raw/483685ac78bccfba4277315559ece375cc287eed/git-forget-blob.sh
+# Completely remove a file from a git repository history
+#
+# Copyleft 2017 by Ignacio Nunez Hernanz <nacho _a_t_ ownyourbits _d_o_t_ com>
+# GPL licensed (see end of file) * Use at your own risk!
+#
+# Usage:
+#   git-forget-blob file_to_forget
+#
+# Notes:
+#   It rewrites history, therefore will change commit references and delete tags
+function git-forget-blob()
+{
+    local BLOBS=( $( git verify-pack -v .git/objects/pack/*.idx | grep blob | awk '{ print $1 }' ) )
+    for ref in ${BLOBS[@]}; do
+        local FILE="$( git rev-list --objects --all | grep $ref | awk '{ print $2 }' )"
+        [[ "$FILE" == "$1" ]] && break
+        unset FILE
+    done
+    [[ "$FILE" == "" ]] && { echo "$1 not found in repo history" && return; }
+
+    git tag | xargs git tag -d
+    git filter-branch --index-filter "git rm --cached --ignore-unmatch $FILE"
+    rm -rf .git/refs/original/ .git/refs/remotes/ .git/*_HEAD .git/logs/
+    git for-each-ref --format="%(refname)" refs/original/ | xargs -n1 --no-run-if-empty git update-ref -d
+    git reflog expire --expire-unreachable=now --all
+    git repack -A -d
+    git prune
+
+    # License
+    #
+    # This script is free software; you can redistribute it and/or modify it
+    # under the terms of the GNU General Public License as published by
+    # the Free Software Foundation; either version 2 of the License, or
+    # (at your option) any later version.
+    #
+    # This script is distributed in the hope that it will be useful,
+    # but WITHOUT ANY WARRANTY; without even the implied warranty of
+    # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    # GNU General Public License for more details.
+    #
+    # You should have received a copy of the GNU General Public License
+    # along with this script; if not, write to the
+    # Free Software Foundation, Inc., 59 Temple Place, Suite 330,
+    # Boston, MA  02111-1307  USA
+}
+
