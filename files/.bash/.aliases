@@ -3,7 +3,7 @@
 
 # Filesystem
 alias rm='rm -i'
-alias ll='ls -lGfha'
+alias ll='ls -l'
 # color=always causes more grief than its worth when pipelining commands
 # alias grep='grep --color=always'
 
@@ -110,7 +110,7 @@ alias nl='npm list --depth=0'
 alias switch_js='nvm'
 
 
-# PHP Laravel Valet 
+# PHP Laravel Valet
 alias sphp70='time switch_php 7.0'
 alias sphp72='time switch_php 7.2'
 alias sphp73='time switch_php 7.3'
