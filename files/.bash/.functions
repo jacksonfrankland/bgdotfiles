@@ -518,8 +518,13 @@ function fixpsql() {
 	brew services start postgresql@9.5;
 }
 
-function enter_directory() {
+# remove all node_module foders within a directory
+function remove_node_modules () {
+	find . -name "node_modules" -type d -prune -exec rm -rf '{}' +
+}
 
+# Use correct node version
+enter_directory() {
 	if [[ $PWD == $PREV_PWD ]]; then
 		return
 	fi
