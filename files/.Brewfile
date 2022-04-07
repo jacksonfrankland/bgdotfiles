@@ -10,6 +10,8 @@ tap 'shivammathur/php'
 tap 'shivammathur/extensions'
 tap 'nicoverbruggen/homebrew-cask'
 
+# -----------------------------------------------------------------------------
+
 # dependencies
 brew 'pkg-config' # bunch of things
 
@@ -117,43 +119,12 @@ mas '1Password 7', id: 1333542190
 mas 'Numbers', id: 409203825
 mas 'Pages', id: 409201541
 mas 'Slack', id: 803453959
-mas 'WhatsApp Desktop', id: 1147396723
 mas 'SQLiteFlow - SQLite Editor', id: 1378587993
 
+# Candidates for mandatory install
 #mas 'Pixelmator Pro', id: 1289583905
 #mas 'Medis - GUI for Redis', id: 1063631769
-#mas 'Apple Remote Desktop', id: 409907375  
+#mas 'Apple Remote Desktop', id: 409907375
 #mas 'Paste - Clipboard Manager', id: 967805235
 
 # Office -  Office 365 - not standalone 2019 compatible - use manual installs Microsoft_Office_16.29.19090802_HomeStudent_Installer
-
-
-# optional
-
-# cask 'launchcontrol'
-# cask 'vagrant-manager'
-
-# optional paid apps (license required) -
-
-# cask 'setapp'
-# cask 'helo'
-# cask 'pinegrow'
-# cask 'postbox'
-# cask 'gitkraken'
-# cask 'tinkerwell'
-
-# mas 'Eye-Friendly', id: 587769990
-# mas 'Jump Desktop (RDP, VNC, Fluid)', id: 524141863
-# mas 'SerialTools', id: 611021963    
-# mas 'ReadKit: Read Later and RSS', id: 588726889  
-
-# screenshots https://cleanshot.com/pricing - possibly use setapp as its included there.
-
-# Tuxera NTFS $15 - # https://download.tuxera.com/mac/tuxerantfs_2021.dmg
-
-# Office -  Office 365 - not standalone 2019 compatible - use manual installs Microsoft_Office_16.29.19090802_HomeStudent_Installer
-
-# mas 'Microsoft Word', id: 462054704
-# mas 'Microsoft Excel', id: 462058435
-# mas 'Microsoft PowerPoint', id: 462062816
-# mas 'Microsoft OneNote', id: 784801555
