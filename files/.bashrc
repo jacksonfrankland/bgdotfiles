@@ -10,21 +10,21 @@ BASEDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" # $HOME
 # Standardising on $HOME.bashrc over $HOME/.profile as $HOME/.bash_profile makes $HOME/.profile obsolete and ignores it
 #
 
-[ -r $BASEDIR/.ps1 ] && source $BASEDIR/.ps1 || true # start aware prompt
 [ -r $BASEDIR/.credentials ] && source $BASEDIR/.credentials || true
 [ -r $BASEDIR/.profile ] && source $BASEDIR/.profile || true
 [ -r $BASEDIR/.functions ] && source $BASEDIR/.functions || true
 [ -r $BASEDIR/.exports ] && source $BASEDIR/.exports || true
 [ -r $BASEDIR/.aliases ] && source $BASEDIR/.aliases || true
+[ -r $BASEDIR/.ps1 ] && source $BASEDIR/.ps1 || true # start aware prompt
 [ -r $BASEDIR/dotfiles/files/switch_php ] && source $BASEDIR/dotfiles/files/switch_php || true
 
 
 # Add folder to search PATH if it exists
-for folder in $HOME/.yarn/bin $HOME/bin /usr/local/bin /usr/local/sbin;
+for folder in $COMPOSER_HOME $HOME/.yarn/bin $HOME/bin /usr/local/bin /usr/local/sbin;
 do
 	if test -e "${folder}"; then
-		echo $PATH | grep "$folder" &>/dev/null && true || export PATH="$PATH:$folder" # add path later in seach path if missing 
-	fi 
+		echo $PATH | grep "$folder" &>/dev/null && true || export PATH="$PATH:$folder" # add path later in seach path if missing
+	fi
 done
 
 
@@ -33,7 +33,7 @@ if test -s "/usr/local/opt/nvm/nvm.sh"; then
     mkdir -p "${NVM_HOME:-$HOME/.nvm}" || true
     source "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
 
-    if test -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm"; then 
+    if test -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm"; then
         source "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
     fi
 fi
@@ -56,6 +56,6 @@ fi
 [ -r /usr/local/etc/profile.d/bash_completion.sh ] && source /usr/local/etc/profile.d/bash_completion.sh || true
 
 # Node Version Manager - Auto Complete
-if test ! -z "${NVM_DIR}"; then    
+if test ! -z "${NVM_DIR}"; then
     [ -s "$NVM_DIR/bash_completion" ] && source "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
