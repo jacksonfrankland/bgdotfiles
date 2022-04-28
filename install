@@ -17,7 +17,17 @@ if test ! $(which brew); then
     echo 'Installing homebrew...'
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
     echo 'Done installing homebrew.'
-    echo '================================================================================'
+#    echo '================================================================================'
+fi
+
+if test -f $HOME/.dotfile_lastrun; then
+    if test -f $HOME/dotfiles/preinstall; then
+        echo '================================================================================'
+        echo 'Running PreInstall script ...'
+        pushd $HOME/dotfiles && bash preinstall && popd || true
+        echo 'Done PreInstall.'
+#        echo '================================================================================'
+    fi
 fi
 
 # if test ! -e $HOME/.vim/autoload/plug.vim; then
@@ -56,6 +66,26 @@ echo 'Installing, updating, and cleaning up brew dependencies...'
 export HOMEBREW_NO_INSTALL_CLEANUP=true
 
 brew bundle --global || true
+# load and process custom brew bundle files
+if test -e $HOME/dotfiles/files/.brew_bundle_files; then # file contains list of brew bundle files
+    for bundle_file in $(cat $HOME/dotfiles/files/.brew_bundle_files); do
+        bundle_file=$(eval echo $bundle_file)
+        if [ -e "$bundle_file" ]; then
+            brew bundle --file $bundle_file || true
+        else
+            echo "Cannot load brew bundle file $bundle_file"
+        fi
+    done
+fi
+if test -n "$BREW_BUNDLE_FILES"; then # USE ENV if set ( space delimited list of files )
+    for bundle_file in $BREW_BUNDLE_FILES; do
+        if [ -e "$bundle_file" ]; then
+            brew bundle --file $bundle_file || true
+        else
+            echo "Cannot load brew bundle file $bundle_file"
+        fi
+    done
+fi
 #brew bundle cleanup --force --global
 # brew services cleanup
 # sudo brew services cleanup
@@ -63,15 +93,18 @@ brew bundle --global || true
 echo 'Done installing, updating, and cleaning up brew dependencies.'
 # echo '================================================================================'
 
-# echo '================================================================================'
-# echo 'Installing and updating composer dependencies...'
+echo '================================================================================'
+echo 'Installing and updating composer dependencies...'
 # composer global update --with-all-dependencies
-# echo 'Done installing and updating composer dependencies.'
-# echo '================================================================================'
+type -p composer &>/dev/null && {
+    echo 'composer version --2.2 required for php < 7.2.5'
+    composer self-update --2.2 || true
+}
+echo 'Done installing and updating composer dependencies.'
+#echo '================================================================================'
 
 
 # /bin/bash $HOME/dotfiles/link
-
 
 # echo '================================================================================'
 # echo 'Installing and updating npm dependencies...'
@@ -126,24 +159,14 @@ date > $HOME/.dotfile_lastrun
 # https://scriptingosx.com/2017/04/about-bash_profile-and-bashrc-on-macos/
 # Alternative to dotfiles - https://yadm.io
 
-
+echo '================================================================================'
+echo 'Installing and updating php, composer and valet dependencies...'
 source $HOME/dotfiles/files/switch_php
-switch_php "${current_php_version:-8.1}"
-echo "Done"
-exit 0
-
-# for now for a php restart as we are often in old 7.0
-
-echo -e "Check and Fix Php (yN) ? " && read valetphp
-case $valetphp in
-    [Yy]* )
-        [ -r $HOME/dotfiles/files/switch_php ] && {
-            source $HOME/dotfiles/files/switch_php
-            switch_php "${current_php_version:-8.1}"
-            #sudo chown -R $(id -un) /usr/local/Cellar/{php*,dnsmasq*,nginx*} &>/dev/null || true
-            # if this fails run php_uninstall and then switch_php 8.1
-        }
-        ;;
-esac
+echo -e "For each PHP version you wish to use please run 'php_install'. e.g.\nphp_install 7.0\nphp_install 8.1"
+echo '================================================================================'
+set +e
 
 echo 'Done!'
+env | egrep -i 'php|compos|valet' | sort
+
+

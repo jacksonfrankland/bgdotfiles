@@ -1,16 +1,17 @@
+#!/usr/bin/env bash
 #
 # Prepares for linking of dotfiles
 #
 # - creates an archive of dotfiles
 # - renames existing (if any) archives
 #
-# Typically used prior to running dotfiles/link or dotfiles/install 
+# Typically, used prior to running dotfiles/link or dotfiles/install
 #
 # WARNING: don't run this if you HOME directory has spaces!! Not tested in that scenario!
 #
 
 function archive_existing_dotfiles() {
-    
+
     [ $# -ne 1 ] && { echo "Usage: $0 archive_file_path"; exit 1; }
 
     archive="$1"
@@ -23,8 +24,8 @@ function archive_existing_dotfiles() {
 
 
     # ... archive them
-    pushd $HOME
-    
+    pushd $HOME || return 1
+
     # add your important dotfiles to the archive
     tar -czLf $archive $to_be_linked \
         "$HOME/.m2/settings*" \
@@ -40,7 +41,8 @@ function archive_existing_dotfiles() {
         $HOME/.mackup.cfg \
         $HOME/.gnupg \
         $HOME/.Brewfile.lock.json \
-        $HOME/predotfiles* \
+        $HOME/.predotfiles/predotfiles*.txt \
+        $HOME/predotfiles*.txt \
         $HOME/.composer/{composer.json,composer.lock} \
         2>/dev/null
 
@@ -50,30 +52,28 @@ function archive_existing_dotfiles() {
 
         # rename files ( allow link command to work )
         for file in $to_be_linked;
-        do          
+        do
             if test -L "$file"; then
                 # symlink - remove it
-                /bin/rm -f "$file" && \
-                    echo "removed symlink $file" || true
+                /bin/rm -f "$file" &&  echo "removed symlink $file" || true
             fi
             if test -f "$file"; then
-                /bin/mv "$file" "${file}_backup" && \
-                    echo "moved file $file to ${file}_backup" || true
-                # [ -e "${file}_backup" ] && /bin/mv "${file}_backup" "$file" 
+                /bin/mv "$file" "${file}_backup" && echo "moved file $file to ${file}_backup" || true
+                # [ -e "${file}_backup" ] && /bin/mv "${file}_backup" "$file"
             fi
         done
 
     else
 
-        echo "🧐 something is wrong - can't find the archive file $archive"   
-        popd
+        echo "🧐 something is wrong - can't find the archive file $archive"
+        popd || return 2
         exit 2
 
     fi
-    popd
+    popd || return 1
 
     echo -e "✨ archive file created - $archive\n✨ check archive with\n\ttar -tvf $archive"
-    echo "You should be able to run "
+    #echo -e "You should be able to run\npushd \$HOME && bash dotfiles/install"
 
 }
 
@@ -102,8 +102,8 @@ function macappstore_bundle_existing() {
 #
 
 datepart=$(date +"%Y%m%d_%H%M%S")
-
-brew_bundle_existing "$HOME/predotfiles.Brewfile_${datepart}.txt"
-macappstore_bundle_existing "$HOME/predotfiles.MacAppStore_list-${datepart}.txt"
-archive_existing_dotfiles "$HOME/predotfiles.my-configuration-${datepart}.tar.gz"
+mkdir -p $HOME/.predotfiles
+brew_bundle_existing "$HOME/.predotfiles/predotfiles.Brewfile_${datepart}.txt"
+macappstore_bundle_existing "$HOME/.predotfiles/predotfiles.MacAppStore_list-${datepart}.txt"
+archive_existing_dotfiles "$HOME/.predotfiles/predotfiles.my-configuration-${datepart}.tar.gz"
 
