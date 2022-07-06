@@ -82,7 +82,7 @@ brew 'zsh'
 #
 # apps
 #
-cask 'docker'
+# cask 'docker' # doesnt seem to install docker - manual download - https://desktop.docker.com/mac/main/arm64/Docker.dmg
 cask 'firefox-developer-edition'
 cask 'google-chrome'
 # cask 'mongodb-compass'
@@ -126,7 +126,7 @@ cask 'jetbrains-toolbox'
 cask 'typora'
 cask 'vmware-fusion'
 
-mas '1Password 7', id: 1333542190
+# mas '1Password 7', id: 1333542190 # installing 1password8 via brew
 mas 'Numbers', id: 409203825
 mas 'Pages', id: 409201541
 mas 'Slack', id: 803453959
