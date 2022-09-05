@@ -9,6 +9,7 @@ tap 'bgdevlab/navicat-for-postgresql'
 tap 'shivammathur/php'
 tap 'shivammathur/extensions'
 tap 'nicoverbruggen/homebrew-cask'
+tap 'cantino/mcfly'
 
 # -----------------------------------------------------------------------------
 
@@ -45,6 +46,7 @@ brew 'java'
 brew 'jenv'
 brew 'jq'
 brew 'less'
+brew 'cantino/mcfly/mcfly'
 brew 'mackup'
 brew 'mailhog', restart_service: true
 brew 'mas'
@@ -53,7 +55,7 @@ brew 'nvm'
 # brew 'php@8.0'
 brew 'pnpm'
 brew 'postgresql@9.5'
-brew 'redis'
+brew 'redis@6.2', restart_service: true, link: true, conflicts_with: ["redis"]
 brew 'ripgrep'
 brew 'shellcheck'
 brew 'shivammathur/php/php@7.0'
