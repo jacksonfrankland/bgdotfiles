@@ -566,4 +566,4 @@ function switch_php() {
 }
 
 # Set PHP and Composer Global PATH and ENV
-export_php_env_and_path
+[[ "$PWD" =~ "$HOME/Workspace" ]] && export_php_env_and_path
