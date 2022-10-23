@@ -113,3 +113,9 @@ if test -d "$HOME/.volta"; then
     export VOLTA_HOME="$HOME/.volta"
     export PATH="$VOLTA_HOME/bin:$PATH"
 fi
+
+# pnpm
+if test -d "$HOME/Library/pnpm"; then
+    export PNPM_HOME="$HOME/Library/pnpm"
+    export PATH="$PNPM_HOME:$PATH"
+fi
