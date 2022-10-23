@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
 # Make vim the default editor.
-export EDITOR='vim';
+export EDITOR='lvim';
 
 # ls command colours
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
+
+export FORCE_COLOR=1
 
 # Enable persistent REPL history for `node`.
 export NODE_REPL_HISTORY=~/.node_history;
@@ -99,4 +101,9 @@ fi
 if test -d "$HOME/.jenv/versions"; then
     export JAVA_HOME="$HOME/.jenv/versions/$(jenv version-name)"
     export PATH="$HOME/.jenv/bin:$PATH"
+fi
+
+# lvim
+if test -e "$HOME/.local/bin/lvim"; then
+    export PATH="$HOME/.local/bin:$PATH"
 fi
