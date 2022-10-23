@@ -160,3 +160,12 @@ alias pgdbs="psql -l -t | cut -d'|' -f1 | egrep -v 'postgres|template' | xargs"
 
 # update xcode tools
 alias updatexcode='xcode-select --install'
+
+# Check for running webapps (sveltekit, vite, etc)
+alias listeningwebapps='lsof -i -n -P | grep node'
+
+# Go to project locations
+alias zn="cd $HOME/Workspace/NSS"
+alias zc="cd $HOME/Workspace/CCS"
+alias zb="cd $HOME/Workspace/l3-services-bomb"
+alias zz="cd $HOME/Projects/Workspace"
