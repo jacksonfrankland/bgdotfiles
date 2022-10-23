@@ -107,3 +107,9 @@ fi
 if test -e "$HOME/.local/bin/lvim"; then
     export PATH="$HOME/.local/bin:$PATH"
 fi
+
+# volta
+if test -d "$HOME/.volta"; then
+    export VOLTA_HOME="$HOME/.volta"
+    export PATH="$VOLTA_HOME/bin:$PATH"
+fi
