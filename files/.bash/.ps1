@@ -669,8 +669,9 @@ function aws_profile {
 # My theme
 # #############################################################################
 SCM_PROMPT_TEXT_COLOR=7
+SCM_PROMPT_CLEAN_TEXT_COLOR=254
 SCM_PROMPT_TEXT_COLOR=254
-SCM_PROMPT_CLEAN_COLOR=2
+SCM_PROMPT_CLEAN_COLOR=35
 SCM_PROMPT_DIRTY_COLOR=166
 SCM_PROMPT_STAGED_COLOR=166
 SCM_PROMPT_UNSTAGED_COLOR=1
@@ -699,7 +700,7 @@ function format_scm_prompt {
         elif [[ "${SCM_DIRTY}" -eq 1 ]]; then
             SCM_PROMPT="$(set_rgb_color ${SCM_PROMPT_TEXT_COLOR} ${SCM_PROMPT_DIRTY_COLOR})"
         else
-            SCM_PROMPT="$(set_rgb_color ${SCM_PROMPT_TEXT_COLOR} ${SCM_PROMPT_CLEAN_COLOR})"
+            SCM_PROMPT="$(set_rgb_color ${SCM_PROMPT_CLEAN_TEXT_COLOR} ${SCM_PROMPT_CLEAN_COLOR})"
         fi
         if [[ "${SCM_GIT_CHAR}" == "${SCM_CHAR}" ]]; then
             SCM_PROMPT+=" ${SCM_CHAR}${SCM_BRANCH} "
