@@ -165,7 +165,8 @@ alias updatexcode='xcode-select --install'
 alias listeningwebapps='lsof -i -n -P | grep node'
 
 # Go to project locations
-alias zn="cd $HOME/Workspace/NSS"
-alias zc="cd $HOME/Workspace/CCS"
-alias zb="cd $HOME/Workspace/l3-services-bomb"
-alias zz="cd $HOME/Projects/Workspace"
+alias zn="cd \$HOME/Workspace/NSS"
+alias zc="cd \$HOME/Workspace/CCS"
+alias zb="cd \$HOME/Workspace/l3-services-bomb"
+alias zz="cd \$HOME/Projects/Workspace"
+alias zd="cd \$HOME/dotfiles"
