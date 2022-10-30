@@ -1,10 +1,11 @@
 - clean: ['~']
 
 - link:
-    ~/.config/kitty/kitty.conf:
-        path: files/kitty.conf
+    ~/.config/kitty:
+        path: files/kitty
         relink: true
         create: true
+        force: true
     ~/.defaults:
         path: files/.defaults
         relink: true
@@ -21,13 +22,13 @@
         relink: true
     ~/.vimrc:
         path: files/.vim/.vimrc
-        relink: true        
+        relink: true
     ~/.gitconfig:
         path: files/.gitconfig
         relink: true
     ~/.gitconfig_aliases:
         path: files/.gitconfig_aliases
-        relink: true        
+        relink: true
     ~/.gitignore_global:
         path: files/.gitignore_global
         relink: true
@@ -50,19 +51,19 @@
     ~/.aliases:
         path: files/.bash/.aliases
         create: true
-        relink: true  
+        relink: true
     ~/.exports:
         path: files/.bash/.exports
         create: true
-        relink: true          
+        relink: true
     ~/.functions:
         path: files/.bash/.functions
         create: true
-        relink: true        
+        relink: true
     ~/.ps1:
         path: files/.bash/.ps1
         create: true
-        relink: true              
+        relink: true
 - create:
     - ~/.fzf_history
     - ~/.vim/undo_history
