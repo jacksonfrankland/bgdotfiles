@@ -6,6 +6,11 @@
         relink: true
         create: true
         force: true
+    ~/.config/helix:
+        path: files/helix
+        relink: true
+        create: true
+        force: true
     ~/.defaults:
         path: files/.defaults
         relink: true
@@ -58,6 +63,10 @@
         relink: true
     ~/.functions:
         path: files/.bash/.functions
+        create: true
+        relink: true
+    ~/.adhoc:
+        path: files/.bash/.adhoc
         create: true
         relink: true
     ~/.ps1:

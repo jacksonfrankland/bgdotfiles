@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Make vim the default editor.
-export EDITOR='lvim';
+export EDITOR='hx';
 
 # ls command colours
 export CLICOLOR=1
@@ -58,7 +58,7 @@ export PGVERSION="${PGVERSION:-9.5}" # this is not a standard PG ENV VAR
 
 # Themes
 
-export BAT_THEME="GitHub"
+# export BAT_THEME="GitHub"
 export MCFLY_LIGHT=TRUE
 
 # =============================================================================
@@ -93,9 +93,9 @@ if test ! -z "${USING_PERL}"; then
 fi
 
 # Node Version Manager
-if test -d "$HOME/.nvm"; then
-    export NVM_DIR="$HOME/.nvm"
-fi
+# if test -d "$HOME/.nvm"; then
+#     export NVM_DIR="$HOME/.nvm"
+# fi
 
 # Jave Env - http://www.jenv.be/ - install multiple java environments
 if test -d "$HOME/.jenv/versions"; then
@@ -108,14 +108,20 @@ if test -e "$HOME/.local/bin/lvim"; then
     export PATH="$HOME/.local/bin:$PATH"
 fi
 
+
+# pnpm
+if test -d "$HOME/Library/pnpm"; then
+    export PNPM_HOME="$HOME/Library/pnpm"
+    export PATH="$PNPM_HOME:$PATH"
+fi
+
 # volta
 if test -d "$HOME/.volta"; then
     export VOLTA_HOME="$HOME/.volta"
     export PATH="$VOLTA_HOME/bin:$PATH"
 fi
 
-# pnpm
-if test -d "$HOME/Library/pnpm"; then
-    export PNPM_HOME="$HOME/Library/pnpm"
-    export PATH="$PNPM_HOME:$PATH"
+# GO
+if test -d "$HOME/go/bin"; then
+    export PATH="$HOME/go/bin:$PATH"
 fi

@@ -650,9 +650,9 @@ enter_directory() {
     [[ "$PWD" =~ "$HOME/Workspace" ]] && php_cli_from_valet || true
     # set local PATH to use PHP as defined in .valetphprc
 
-    [ -f "package.json" -o -f ".nvmrc" ] && {
-        [ "$(npm -v | cut -d. -f1)" -lt 8 ] && echo "Suggest: upgrade npm with 'npm install -g npm@latest'"
-    }
+    # [ -f "package.json" -o -f ".nvmrc" ] && {
+    #     [ "$(npm -v | cut -d. -f1)" -lt 8 ] && echo "Suggest: upgrade npm with 'npm install -g npm@latest'"
+    # }
 }
 
 
