@@ -1,3 +1,8 @@
 theme = "theme"
+
 [editor]
 line-number = "relative"
+scrolloff = 15
+
+[editor.cursor-shape]
+insert = "bar"
