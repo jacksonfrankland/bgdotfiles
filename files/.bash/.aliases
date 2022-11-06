@@ -3,9 +3,11 @@
 
 # Filesystem
 alias rm='rm -i'
-alias ll='ls -lGha'
-# color=always causes more grief than its worth when pipelining commands
-# alias grep='grep --color=always'
+
+# alternatives
+alias ll='exa --long --header --git'
+alias cat='bat'
+alias vim='nvim'
 
 
 # Network
@@ -57,11 +59,6 @@ alias bsl='sudo brew services list && brew services list'
 # Get VSCode extensions
 alias codeextensions='code --list-extensions | xargs -L 1 echo code --install-extension'
 alias subl=code # no sublime - vscode only
-
-
-# Emotes
-alias shrug="echo '¯\_(ツ)_/¯' | pbcopy;echo '¯\_(ツ)_/¯'";
-
 
 # Defaults
 # Show/Hide hidden files in Finder
