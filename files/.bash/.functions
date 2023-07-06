@@ -102,42 +102,43 @@ function what_port() {
 }
 
 
+# function op () {
+# 	DIR=$HOME/Projects/Workspace/apps/$1
+# 	if [ -d "$DIR" ]; then
+# 		cd $DIR
+# 		zellij --layout $1
+# 		return
+# 	fi
+# 	DIR=$HOME/Workspace/$1
+# 	if [ -d "$DIR" ]; then
+# 		cd $DIR
+# 		zellij --layout $1
+# 		return
+# 	fi
+# }
+
 function op() {
 	#
 	# Function to open specified project in projects folder
 	#
 
-	# To override use env WORKSPACE, e.g. export WORKSPACE=~/Code
-	rootfolder="${WORKSPACE:-$HOME/Documents}"
-
-	echo "ENV(WORKSPACE:${WORKSPACE})"
-
-
 	found=0 # 0 = Not Found; 1 = Found
 	project="$1" # Name of project given
-	repo="$2" # Name of repository given
 	count=0 # Array counter
 
 	# Following is in order of preference
-	if [[ $repo != "" ]]; then # Change to project repo
-		directories[$count]=${rootfolder}/${project}/${repo}; ((count++));
-		directories[$count]=${rootfolder}/${project}*/${repo}*; ((count++));
-		directories[$count]=${rootfolder}/${project}*/bgdevlab-${repo}; ((count++));
-	fi
-
-	# Usually webapp is the common repo if no repo was specified
-	directories[$count]=${rootfolder}/${project}/webapp; ((count++));
-	directories[$count]=${rootfolder}/${project}/${project}; ((count++));
-	directories[$count]=${rootfolder}/${project}/scratch; ((count++));
-	directories[$count]=${rootfolder}/${project}; ((count++));
-	directories[$count]=${rootfolder}/${project}*; ((count++));
+	directories[$count]=$HOME/Workspace/${project}; ((count++));
+	directories[$count]=$HOME/Projects/${project}; ((count++));
+	directories[$count]=$HOME/Projects/Workspace/apps/${project}; ((count++));
+	directories[$count]=$HOME/Projects/Workspace/packages/${project}; ((count++));
+	directories[$count]=$HOME/${project}; ((count++));
 
 	# Look for possible project folders and change into it if one found.
 	for dir in ${directories[@]}; do
 		if [[ -d $dir ]]; then
 			found=1
 			pushd $dir
-			echo -e "Changed directory to: $(echo_color green)'$dir'${echo_normal}"
+			zellij --layout $project
 			break
 		fi
 	done
@@ -647,7 +648,7 @@ enter_directory() {
 	# [[ -f ".nvmrc" ]] && nvm use || true
     # Use correct node version AND use latest compatible NPM
 
-    [[ "$PWD" =~ "$HOME/Workspace" ]] && php_cli_from_valet || true
+    [[ "$PWD" =~ "$HOME/Code" ]] && php_cli_from_valet || true
     # set local PATH to use PHP as defined in .valetphprc
 
     # [ -f "package.json" -o -f ".nvmrc" ] && {

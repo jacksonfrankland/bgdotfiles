@@ -47,9 +47,6 @@ export FPATH="$BREW_PREFIX/share/zsh/site-functions:$FPATH"
 # Use the terminal to enter GPG passphrase
 export GPG_TTY=$(tty)
 
-# Use Dracula for the syntax highlighting theme
-export BAT_THEME="Dracula"
-
 # VIM, not nano
 export VISUAL=vim
 export EDITOR="$VISUAL"
@@ -113,3 +110,5 @@ compinit
 autoload -U promptinit; promptinit
 prompt pure
 
+# export VOLTA_HOME="$HOME/.volta"
+# export PATH="$VOLTA_HOME/bin:$PATH"

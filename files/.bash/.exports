@@ -2,6 +2,7 @@
 
 # Make vim the default editor.
 export EDITOR='hx';
+export VISUAL='hx';
 
 # ls command colours
 export CLICOLOR=1
@@ -56,10 +57,6 @@ export PGUSER="${PGUSER:-postgres}"
 export PGDATABASE="${PGDATABASE:-postgres}"
 export PGVERSION="${PGVERSION:-9.5}" # this is not a standard PG ENV VAR
 
-# Themes
-
-# export BAT_THEME="GitHub"
-export MCFLY_LIGHT=TRUE
 
 # =============================================================================
 
@@ -99,9 +96,11 @@ if test -d "$PNPM_HOME"; then
 fi
 
 # Node Version Manager
-# if test -d "$HOME/.nvm"; then
-#     export NVM_DIR="$HOME/.nvm"
-# fi
+if test -d "$HOME/.nvm"; then
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+    [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+fi
 
 # Jave Env - http://www.jenv.be/ - install multiple java environments
 if test -d "$HOME/.jenv/versions"; then
@@ -131,3 +130,20 @@ fi
 if test -d "$HOME/go/bin"; then
     export PATH="$HOME/go/bin:$PATH"
 fi
+
+if test -d "/usr/local/opt/arm-none-eabi-gcc@8"; then
+    export PATH="/usr/local/opt/arm-none-eabi-gcc@8/bin:$PATH"
+    export LDFLAGS="-L/usr/local/opt/arm-none-eabi-gcc@8/lib"
+fi
+
+# bat
+if test -d "$HOME/.config/bat/themes"; then
+    export BAT_THEME="Catppuccin-macchiato"
+fi
+
+#fzf
+export FZF_DEFAULT_OPTS=" \
+--color=bg+:#363a4f,bg:#24273a,spinner:#f4dbd6,hl:#ed8796 \
+--color=fg:#cad3f5,header:#ed8796,info:#c6a0f6,pointer:#f4dbd6 \
+--color=marker:#f4dbd6,fg+:#cad3f5,prompt:#c6a0f6,hl+:#ed8796"
+

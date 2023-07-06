@@ -1,81 +1,29 @@
 [user]
-	name = Jackson
-	email = contact@jacksonfrankland.com
+	name = Jackson Frankland
+	email = jackson.frankland@blueglue.com.au
 	signingKey = ""
     # https://stackoverflow.com/questions/48065535/should-i-keep-gitconfigs-signingkey-private
 [core]
 	autocrlf = input
 	excludesfile = ~/.gitignore_global
+	pager = delta
 [commit]
 	gpgSign = false
     template = ~/.gitmessage
-[mergetool]
-	keepBackup = true
-	prompt = false
-[difftool]
-	prompt = false
-[gc]
-	autoDetach = false
-[gpg]
-    program = gpg
-[color]
-    ui = auto
-[color "diff"]
-    meta = yellow
-    commit = green
-    frag = magenta
-    old = red
-    new = green
-    whitespace = red reverse
-    newMoved = cyan
-    oldMoved = blue
-[color "branch"]
-    current = cyan reverse
-    local = cyan
-    remote = green
-[color "status"]
-    added = green
-    changed = yellow
-    untracked = cyan
-    unmerged = cyan
-    branch = cyan
-    nobranch = cyan
-[color "diff-highlight"]
-    oldNormal = red bold
-    oldHighlight = red reverse
-    newNormal = green
-    newHighlight = green reverse
 [diff]
     colorMoved = default
-	submodule = log
-[stash]
-    showPatch = true
+[merge]
+	conflictstyle = diff3
 [interactive]
     # show a nicer diff when using `git add -p`
     diffFilter = delta --color-only
 [delta]
-    features = line-numbers decorations
-    #syntax-theme = Dracula
-    plus-style = syntax "#003800"
-    minus-style = syntax "#3f0001"
-[delta "decorations"]
-    commit-decoration-style = bold yellow box ul
-    file-style = bold yellow ul
-    file-decoration-style = none
-    hunk-header-decoration-style = cyan box ul
-[delta "line-numbers"]
-    line-numbers-left-style = cyan
-    line-numbers-right-style = cyan
-    line-numbers-minus-style = 124
-    line-numbers-plus-style = 28
+	navigate = true
+	light = false
+	line-numbers = true
+	side-by-side = true
 [init]
-	defaultBranch = master
-[status]
-    # working with submodules - https://medium.com/@porteneuve/mastering-git-submodules-34c65e940407
-	submoduleSummary = true
-[tag]
-	forceSignAnnotated = false
-	sort = v:refname
+	defaultBranch = main
 [include]
     path = .gitconfig_aliases
 

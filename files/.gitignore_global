@@ -23,7 +23,6 @@
 # Logs and databases #
 ######################
 *.log
-*.sql
 *.sqlite
 
 # OS generated files #
@@ -75,7 +74,6 @@ tags
 [._]*.un~
 
 .php_cs.local
-.vimrc
 scratch.md
 
 # Node
@@ -107,7 +105,6 @@ $RECYCLE.BIN/
 .idea/
 
 # vi
-*~
 
 # Php - Composer
 # vendor/ # not this as resources/views/vendor is published to and should be under version control
@@ -122,3 +119,4 @@ scratch/
 
 # Php
 .php-cs-fixer.cache
+

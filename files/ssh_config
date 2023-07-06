@@ -4,13 +4,17 @@ Host backup01
   KexAlgorithms +diffie-hellman-group1-sha1
   HostKeyAlgorithms=+ssh-dss 
 
-Host 10.20.1.*
-  LogLevel INFO
-  User root
-  KexAlgorithms +diffie-hellman-group1-sha1
-  HostKeyAlgorithms=+ssh-dss 
+# Host 10.20.1.*
+#   LogLevel INFO
+#   User root
+#   KexAlgorithms +diffie-hellman-group1-sha1
+#   HostKeyAlgorithms=+ssh-dss 
 
 Host *
   AddKeysToAgent yes
   UseKeychain no
 
+  Host backup01, reverse-proxy, 10.20.1.* 
+  LogLevel INFO
+  KexAlgorithms +diffie-hellman-group1-sha1
+  HostKeyAlgorithms=+ssh-dss

@@ -668,14 +668,12 @@ function aws_profile {
 # #############################################################################
 # My theme
 # #############################################################################
-SCM_PROMPT_TEXT_COLOR=7
-SCM_PROMPT_CLEAN_TEXT_COLOR=254
-SCM_PROMPT_TEXT_COLOR=254
-SCM_PROMPT_CLEAN_COLOR=35
-SCM_PROMPT_DIRTY_COLOR=166
-SCM_PROMPT_STAGED_COLOR=166
+SCM_PROMPT_TEXT_COLOR=0
+SCM_PROMPT_CLEAN_TEXT_COLOR=0
+SCM_PROMPT_CLEAN_COLOR=2
+SCM_PROMPT_DIRTY_COLOR=3
 SCM_PROMPT_UNSTAGED_COLOR=1
-PWD_THEME_PROMPT_TEXT_COLOR=7
+PWD_THEME_PROMPT_TEXT_COLOR=0
 PWD_THEME_PROMPT_BG_COLOR=4
 
 function set_rgb_color {

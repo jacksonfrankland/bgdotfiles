@@ -5,7 +5,7 @@
 alias rm='rm -i'
 
 # alternatives
-alias ll='exa --long --header --git'
+alias ll='exa --long --header --git -a'
 alias cat='bat'
 alias vim='nvim'
 
@@ -18,6 +18,7 @@ alias killport='kill_port'
 # SSH
 alias sshgen='ssh-keygen -t rsa'
 alias sshkey='pbcopy < ~/.ssh/id_rsa.pub'
+alias s='kitty +kitten ssh'
 
 
 # conveniences
@@ -46,9 +47,11 @@ alias gittree='git log --branches --remotes --tags --graph --pretty=format:"%Cre
 # debug git
 alias git_debug="GIT_TRACE=true GIT_CURL_VERBOSE=true GIT_SSH_COMMAND=\"ssh -vvv\" GIT_TRACE_PACK_ACCESS=true GIT_TRACE_PACKET=true GIT_TRACE_PACKFILE=true GIT_TRACE_PERFORMANCE=true GIT_TRACE_SETUP=true GIT_TRACE_SHALLOW=true git $@"
 
-
 # Auto Complete
-[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion || echo -e "missing bash-completion, try\n\tbrew install bash-completion"
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+. $(brew --prefix)/etc/bash_completion
+fi
+
 [[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && source "/usr/local/etc/profile.d/bash_completion.sh"
 
 
@@ -140,6 +143,9 @@ alias phpunit='vendor/bin/phpunit --log-junit scratch/phpunit_release_report.$(d
 # support env var 'phpunitpart' as part of the filename
 alias phpunit='vendor/bin/phpunit --log-junit $(echo ${phpunitdir:-scratch})/phpunit_$(echo ${phpunitpart:-report}).xml'
 
+# pest
+alias pest='./vendor/bin/pest'
+
 alias phpspec='/usr/local/bin/phpspec'
 
 # xDebug
@@ -169,3 +175,8 @@ alias zc="cd \$HOME/Workspace/CCS"
 alias zb="cd \$HOME/Workspace/l3-services-bomb"
 alias zz="cd \$HOME/Projects/Workspace"
 alias zd="cd \$HOME/dotfiles"
+
+# Zellij
+alias zj="zellij"
+
+alias resettty="printf '\e[?2004l'"

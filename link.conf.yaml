@@ -6,8 +6,23 @@
         relink: true
         create: true
         force: true
-    ~/.config/helix:
-        path: files/helix
+    ~/.config/gitui:
+        path: files/gitui
+        relink: true
+        create: true
+        force: true
+    ~/.config/bat:
+        path: files/bat
+        relink: true
+        create: true
+        force: true
+    ~/.config/zellij:
+        path: files/zellij
+        relink: true
+        create: true
+        force: true
+    ~/.tmux.conf:
+        path: files/tmux/tmux.conf
         relink: true
         create: true
         force: true
