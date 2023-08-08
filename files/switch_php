@@ -664,7 +664,7 @@ function uvlsi() {
 
 # Set PHP and Composer Global PATH and ENV
 __php_export_env_path $PHP_DEFAULT_VERSION
-[[ "$PWD" =~ "$HOME/Workspace" ]] && export_php_env_and_path
+# [[ "$PWD" =~ "$HOME/Workspace" ]] && export_php_env_and_path
 
 # pre-cache latest php available via brew - ( 1st time each day this takes a few seconds )
 __php_brew_latest_stable_version &>/dev/null
