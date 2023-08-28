@@ -673,18 +673,21 @@ function pghashlib_install() {
     echo "unzip" && unzip pghashlib.zip &>/dev/null && \
     pushd pghashlib-master && \
     echo "hashlib install" && \
-    echo "make" make &>/dev/null && \
+    echo "make" && make &>/dev/null && \
     echo "make install" && make install &>/dev/null && \
     echo "hashlib done"
 
     popd && \
+    echo "Tidyup hashlib" && \
     [ -e pghashlib-master ] && rm -rf pghashlib-master && \
     rm -f pghashlib.zip &>/dev/null || true
 
     popd
 
-    psql -d postgres -c "drop extension hashlib" &>/dev/null && \
-    psql -d postgres -c "create extension hashlib" && \
+    psql -U $(whoami) -c "create role postgres superuser login password '';" &>/dev/null || true
+    psql -U postgres -c "drop extension hashlib" &>/dev/null || true
+
+    psql -U postgres  -c "create extension hashlib" && \
     [ $(psql -U postgres -t -c "select encode(hash128_string('abcdefg', 'murmur3'), 'hex');" | head -1 | awk '{print $1}') == '069b3c88000000000000000000000000' ] \
         && echo 'pghashlib installed correctly' \
         || 'pghashlib not installed correctly'
@@ -703,6 +706,43 @@ function fix_postgres() {
     sleep 2
     pghashlib_install
     psql -l
+}
+
+function switch_postgres() {
+    local PG_VERSION="${1:-${PGVERSION:-9.5}}"
+
+    # stop all postgresql services
+    versions=$(find /usr/local/opt -path '*/postgresql@*' | sed 's#/usr/local/opt/##g')
+    if ! echo "$versions" | grep $PG_VERSION; then
+        echo "Postgres $PG_VERSION is not installed."
+        return 1
+    fi
+
+    # remove requested version for all versions - lets not stop it if its already running.
+    versions=$(echo $versions | sed "s#postgresql@$PG_VERSION##g")
+    for version in $versions; do
+        brew services stop $version &>/dev/null
+    done
+
+    sed -i '' "/SWITCHED_PGVERSION/d" $HOME/.versions
+    echo "SWITCHED_PGVERSION=$PG_VERSION # $(date)" >> $HOME/.versions
+
+    PGVERSION=$PG_VERSION
+    export PGVERSION
+
+
+    # clean and update PATH
+    CLEANED_PATH="$(echo $PATH | sed -E 's#/usr/local/opt/postgresql@[0-9.]*/bin[/]*[:]*##g')"
+    export PATH="$CLEANED_PATH"
+
+    # set environment as per brew info for the service
+    if test -e /usr/local/opt/postgresql@${PGVERSION}; then
+        export PATH="/usr/local/opt/postgresql@${PGVERSION}/bin:$PATH"
+        export LDFLAGS="-L/usr/local/opt/postgresql@${PGVERSION}/lib"
+        export CPPFLAGS="-I/usr/local/opt/postgresql@${PGVERSION}/include"
+    fi
+
+    brew services start postgresql@${PG_VERSION}
 }
 
 function rebuildOpenWith() {
