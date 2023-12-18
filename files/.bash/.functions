@@ -125,38 +125,6 @@ function what_port() {
 # 	fi
 # }
 
-function op() {
-	#
-	# Function to open specified project in projects folder
-	#
-
-	found=0 # 0 = Not Found; 1 = Found
-	project="$1" # Name of project given
-	count=0 # Array counter
-
-	# Following is in order of preference
-	directories[$count]=$HOME/Workspace/${project}; ((count++));
-	directories[$count]=$HOME/Projects/${project}; ((count++));
-	directories[$count]=$HOME/Projects/Workspace/apps/${project}; ((count++));
-	directories[$count]=$HOME/Projects/Workspace/packages/${project}; ((count++));
-	directories[$count]=$HOME/${project}; ((count++));
-
-	# Look for possible project folders and change into it if one found.
-	for dir in ${directories[@]}; do
-		if [[ -d $dir ]]; then
-			found=1
-			pushd $dir
-			zellij --layout $project
-			break
-		fi
-	done
-
-	# Was folder changed?
-	if [[ $found == 0 ]]; then
-		echo -e "$(echo_color red)Project directory not found.${echo_normal}"
-	fi
-}
-
 function npmlist() {
     # e.g. npmlist prebuild
     # e.g. npmlist prebuild withdate
@@ -872,4 +840,31 @@ function git-grouped-log_original () {
 
     echo
   done 9< <(git log --no-merges --format=$'%cd %cn' --date=short | sort --unique --reverse)
+}
+
+function d () {
+	if [[ $# -eq 1 ]]; then
+    selected=$1
+	else
+    items="$(find ~/Code -maxdepth 1 -mindepth 1 \( -type l -o -type d \))"
+    selected="$(echo "$items" | fzf)"
+	fi
+
+	dirname="$(basename "$selected" | sed 's/\./_/g')"
+
+	cd "$selected"
+}
+
+function a () {
+	if [[ $# -eq 1 ]]; then
+    selected=$1
+	else
+    items="$(find ~/Code -maxdepth 1 -mindepth 1 \( -type l -o -type d \))"
+    selected="$(echo "$items" | fzf)"
+	fi
+
+	dirname="$(basename "$selected" | sed 's/\./_/g')"
+
+	cd "$selected"
+	"zellij a -c $dirname"
 }

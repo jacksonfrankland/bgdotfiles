@@ -195,5 +195,8 @@ alias zd="cd \$HOME/dotfiles"
 
 # Zellij
 alias zj="zellij"
+alias zja='zellij a -c'
 
 alias resettty="printf '\e[?2004l'"
+
+alias ccstest='USE_PEST=true __PHPUNIT_BASE_DIR=scratch TESTDOX_LOG=tests/ccs_test_result.txt bin/test-script test'
