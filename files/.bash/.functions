@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 
+if test -t 1; then
+    # Determine if colors are supported...
+    ncolors=$(tput colors)
+
+    if test -n "$ncolors" && test "$ncolors" -ge 8; then
+        BOLD="$(tput bold)"
+        YELLOW="$(tput setaf 3)"
+        GREEN="$(tput setaf 2)"
+        RED="$(tput setaf 1)"
+        NC="$(tput sgr0)"
+    fi
+fi
+
 # macOS sed fix - https://stackoverflow.com/questions/5694228/sed-in-place-flag-that-works-both-on-mac-bsd-and-linux
 sedi=(-i) && [ "$(uname)" == "Darwin" ] && sedi=(-i '')
 # usage - sed "${sedi[@]}" "s/^LOOKFOR.*/REPALCEWITH/" yourfile
@@ -43,6 +56,12 @@ function nah() {
     tar -czf $safearchive -T $archivelist &>/dev/null || true &&
     echo -e "View contents of archived changes (just in case) with \ntar -tvf $safearchive\n" &&
     git reset --hard && git clean -df
+}
+
+function netlist() {
+    for dvc in $(ipconfig getiflist | tr ' ' "\n" | sort); do echo "   $dvc : $(ipconfig getifaddr $dvc)"; done
+    #for dvc in $(ipconfig getiflist | tr ' ' "\n" | grep -v bridge | sort); do echo "   $dvc : $(ipconfig getifaddr $dvc)"; done
+    # defipaddr=$(ipconfig getifaddr $(ipconfig getiflist | tr ' ' "\n" | grep -v bridge | sort | tail -1))
 }
 
 function plist_pluck() {
@@ -109,6 +128,20 @@ function what_port() {
 	# ps -Ao user,pid,command | grep -v grep | grep $(netstat -anv | grep "$searchport " | awk '{print $9}')
 }
 
+function d() {
+
+    if [[ $# -eq 1 ]]; then
+        selected=$1
+    else
+        rootfolder="${WORKSPACE:-$HOME/Documents}"
+        items="$(find $rootfolder -maxdepth 1 -mindepth 1 \( -type l -o -type d \))"
+        selected="$(echo "$items" | fzf)"
+    fi
+
+    dirname="$(basename "$selected" | sed 's/\./_/g')"
+
+    cd "$selected"
+}
 
 # function op () {
 # 	DIR=$HOME/Projects/Workspace/apps/$1
@@ -273,27 +306,31 @@ function clearall() {
         echo "Stopping - cannot find dotenv file '$dotenv'"
         return 1
     }
-    grep -E 'APP_ENV|_CONNECTION|_DRIVER|PROCORE|DB_DATABASE' $dotenv
+    grep -E 'APP_ENV|_CONNECTION|_DRIVER|PROCORE|DB_DATABASE' $dotenv | grep -v '^#'
+    echo -e "\n"
 
     php_ver="$(get_php_version)"
 
+    cleanfiles=$(ls -1 bootstrap/cache/*.php 2>&1) && {
+        for f in $cleanfiles; do echo "removing $f"; done
+        /bin/rm -f bootstrap/cache/*.php &>/dev/null || true;
+    } || true
+
+    ac=$($artisan clear 2>&1) && echo $ac || true
     case "$php_ver" in
     5.6)
         logit "not supported" && return 1
         ;;
-    7.0)
+    7.0|7.1|7.2|7.3|7.4)
         artisan="php artisan "
+        $artisan | grep -q opcache && $artisan opcache:clear 2>&1 || true
+        ac=$($artisan queue:flush 2>&1) && echo $ac || true
         # there isn't optimize:clear for php7.0 compatible laravel versions
         # $artisan event:clear
         $artisan view:clear
         $artisan cache:clear
-        $artisan route:clear
         $artisan config:clear
-        # the above called in newer laravel versions via optimize:clear
-        $artisan clear-compiled
-        # /bin/rm -f bootstrap/cache/*.php || true
-        $artisan opcache:clear &>/dev/null || echo -e "Skipping: artisan opcache:clear ( use argument 'oc' ) "
-        $artisan queue:flush
+        $artisan route:clear
 
         if [ $# -gt 1 ]; then
             # optimize things again.
@@ -303,8 +340,7 @@ function clearall() {
      *)
         # this clears all
         $artisan optimize:clear
-        # /bin/rm -f bootstrap/cache/*.php || true
-        $artisan opcache:clear &>/dev/null || echo -e "Skipping: artisan opcache:clear ( use argument 'oc' ) "
+        $artisan | grep -q opcache && $artisan opcache:clear &>/dev/null || true
         $artisan queue:clear
         $artisan queue:flush
         $artisan schedule:clear-cache
@@ -314,14 +350,19 @@ function clearall() {
             $artisan optimize
         fi
     esac
-
+    echo "done"
     return
 
 }
 
-# TODO - move to autocomplete section
-# autocomplete - PHP - Deployer - add auto-complete for 'prov' alias, an alias to 'dep' (see deployer/deployer )
-type -t _deployer ^ >/dev/null && complete -o default -F _deployer prov
+function macos_sed_fix() {
+    if uname | grep -iq darwin; then
+      if [ ! -e "$HOMEBREW_PREFIX/opt/gnu-sed/libexec/gnubin" ]; then
+        HOMEBREW_NO_INSTALL_UPGRADE=true brew install gnu-sed
+      fi
+      PATH="$HOMEBREW_PREFIX/opt/gnu-sed/libexec/gnubin:$PATH"
+    fi
+}
 
 # autocomplete - Laravel - Artisan - https://gist.github.com/jhoff/8fbe4116d74931751ecc9e8203dfb7c4
 _artisan() {
@@ -334,15 +375,90 @@ complete -F _artisan art
 complete -F _artisan artisan
 
 
-# TODO - move to autocomplete section
-# provision autocomplete
-_prov() {
-    COMP_WORDBREAKS=${COMP_WORDBREAKS//:/}
-    COMMANDS=$(dep -f=prov.php --raw --no-ansi list | sed "s/[[:space:]].*//g")
-    COMPREPLY=($(compgen -W "$COMMANDS" -- "${COMP_WORDS[COMP_CWORD]}"))
-    return 0
+# This file is part of the Symfony package.
+#
+# (c) Fabien Potencier <fabien@symfony.com>
+#
+# For the full copyright and license information, please view
+# https://symfony.com/doc/current/contributing/code/license.html
+
+_sf_dep() {
+    # Use newline as only separator to allow space in completion values
+    IFS=$'\n'
+    local sf_cmd="${COMP_WORDS[0]}"
+
+    # for an alias, get the real script behind it
+    sf_cmd_type=$(type -t $sf_cmd)
+    if [[ $sf_cmd_type == "alias" ]]; then
+        sf_cmd=$(alias $sf_cmd | sed -E "s/alias $sf_cmd='(.*)'/\1/")
+    elif [[ $sf_cmd_type == "file" ]]; then
+        sf_cmd=$(type -p $sf_cmd)
+    fi
+
+    if [[ $sf_cmd_type != "function" && ! -x $sf_cmd ]]; then
+        return 1
+    fi
+
+    local cur prev words cword
+    _get_comp_words_by_ref -n := cur prev words cword
+
+    local completecmd=("$sf_cmd" "_complete" "--no-interaction" "-sbash" "-c$cword" "-S7.3.3")
+    for w in ${words[@]}; do
+        w=$(printf -- '%b' "$w")
+        # remove quotes from typed values
+        quote="${w:0:1}"
+        if [ "$quote" == \' ]; then
+            w="${w%\'}"
+            w="${w#\'}"
+        elif [ "$quote" == \" ]; then
+            w="${w%\"}"
+            w="${w#\"}"
+        fi
+        # empty values are ignored
+        if [ ! -z "$w" ]; then
+            completecmd+=("-i$w")
+        fi
+    done
+
+    local sfcomplete
+    if sfcomplete=$(${completecmd[@]} 2>&1); then
+        local quote suggestions
+        quote=${cur:0:1}
+
+        # Use single quotes by default if suggestions contains backslash (FQCN)
+        if [ "$quote" == '' ] && [[ "$sfcomplete" =~ \\ ]]; then
+            quote=\'
+        fi
+
+        if [ "$quote" == \' ]; then
+            # single quotes: no additional escaping (does not accept ' in values)
+            suggestions=$(for s in $sfcomplete; do printf $'%q%q%q\n' "$quote" "$s" "$quote"; done)
+        elif [ "$quote" == \" ]; then
+            # double quotes: double escaping for \ $ ` "
+            suggestions=$(for s in $sfcomplete; do
+                s=${s//\\/\\\\}
+                s=${s//\$/\\\$}
+                s=${s//\`/\\\`}
+                s=${s//\"/\\\"}
+                printf $'%q%q%q\n' "$quote" "$s" "$quote";
+            done)
+        else
+            # no quotes: double escaping
+            suggestions=$(for s in $sfcomplete; do printf $'%q\n' $(printf '%q' "$s"); done)
+        fi
+        COMPREPLY=($(IFS=$'\n' compgen -W "$suggestions" -- $(printf -- "%q" "$cur")))
+        __ltrim_colon_completions "$cur"
+    else
+        if [[ "$sfcomplete" != *"Command \"_complete\" is not defined."* ]]; then
+            >&2 echo
+            >&2 echo $sfcomplete
+        fi
+
+        return 1
+    fi
 }
-complete -F _prov prov
+
+complete -F _sf_dep dep
 
 
 function imagick_test() {
@@ -635,12 +751,32 @@ enter_directory() {
 
 function pghashlib_install() {
 
+    # alternative
+    #   - https://github.com/Cyan4973/xxHash
+    #   - https://github.com/hatarist/pg_xxhash
+    #   - https://github.com/fboulnois/pg_uuidv7
+    #   - https://github.com/petere/pgvihash
+
+    # extensions
+    # https://gist.github.com/joelonsql/e5aa27f8cc9bd22b8999b7de8aee9d47
+    # https://docs.digitalocean.com/products/databases/postgresql/details/supported-extensions/
+    #
+
+
+
     brew install docutils # provides rst2html command
     pushd /tmp && \
     wget --quiet https://github.com/markokr/pghashlib/archive/master.zip -O pghashlib.zip && \
-    echo "unzip" && unzip pghashlib.zip &>/dev/null && \
+    echo "unzip" && unzip -o pghashlib.zip &>/dev/null && \
     pushd pghashlib-master && \
     echo "hashlib install" && \
+    if [ -e "$(find $(pg_config --includedir) -name 'varatt.h')" ]; then
+        # postgres 16+ fails for phhashlib
+        # build failure on postgres16 - https://stackoverflow.com/questions/77617997/how-to-set-varsize-and-set-varsize-in-postgresql-16
+        # append after match #include <fmgr.h> - src/pghashlib.h
+        line=$(grep -n '#include <fmgr.h>' src/pghashlib.h | cut -d: -f1)
+        sed -i '' "${line}s/^/#include <varatt.h>\n/" src/pghashlib.h
+    fi &&
     echo "make" && make &>/dev/null && \
     echo "make install" && make install &>/dev/null && \
     echo "hashlib done"

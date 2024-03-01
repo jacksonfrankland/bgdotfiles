@@ -48,6 +48,13 @@ done
 # 	eval "$(jenv init -)" || echo "jenv failed to initialise"
 # fi
 
+# Override default macOs Ruby with Brew's version.
+export PATH="/usr/local/opt/ruby/bin:$PATH"
+# For compilers to find ruby you may need to set:
+export LDFLAGS="-L/usr/local/opt/ruby/lib"
+export CPPFLAGS="-I/usr/local/opt/ruby/include"
+# For pkg-config to find ruby you may need to set:
+export PKG_CONFIG_PATH="/usr/local/opt/ruby/lib/pkgconfig"
 
 
 # ===========================================================================
@@ -57,8 +64,10 @@ done
 [ -f $HOME/.twilio-cli/autocomplete/bash_setup ] && source $HOME/.twilio-cli/autocomplete/bash_setup || true;
 
 # Bash Auto Complete
-[ -f /usr/local/etc/bash_completion ] && source /usr/local/etc/bash_completion || echo -e "missing bash-completion, try\n\tbrew install bash-completion"
-[ -r /usr/local/etc/profile.d/bash_completion.sh ] && source /usr/local/etc/profile.d/bash_completion.sh || true
+# bash v3 on mac doesnt support nosort option - lets ignore it https://rakhesh.com/mac/bash-complete-nosort-invalid-option-name/
+[ ! -f /usr/local/etc/bash_completion ] && echo -e "missing bash-completion, try\n\tbrew install bash-completion"
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion 2>&1 | grep -v 'nosort'
+[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && source "/usr/local/etc/profile.d/bash_completion.sh" 2>&1 | grep -v 'nosort'
 
 # Node Version Manager - Auto Complete
 # if test ! -z "${NVM_DIR}"; then
