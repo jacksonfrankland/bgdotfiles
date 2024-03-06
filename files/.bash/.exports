@@ -73,12 +73,21 @@ export PHP_EXTENSIONS="${PHP_EXTENSIONS:-shivammathur/extensions/redis shivammat
 # Used for automatic nvm switching
 export PROMPT_COMMAND="$PROMPT_COMMAND; enter_directory"
 
-# Postgres - align to linux and connect as postgres by default
-if test -e /usr/local/opt/postgresql@${PGVERSION}; then
-    export PATH="/usr/local/opt/postgresql@${PGVERSION}/bin:$PATH"
-    export LDFLAGS="-L/usr/local/opt/postgresql@${PGVERSION}/lib"
-    export CPPFLAGS="-I/usr/local/opt/postgresql@${PGVERSION}/include"
+# Check for custom built frankenphp
+FRANKENPATH="${FRANKENPATH:-/Users/theodickinson/Workspace/frankenphp/frankenphp}"
+if [ -e "${FRANKENPATH}/dist" ]; then
+    export PATH="${FRANKENPATH}/dist:$PATH"
 fi
+
+# Postgres - align to linux and connect as postgres by default
+if [ false ]; then
+    if test -e /usr/local/opt/postgresql@${PGVERSION}; then
+        export PATH="/usr/local/opt/postgresql@${PGVERSION}/bin:$PATH"
+        export LDFLAGS="-L/usr/local/opt/postgresql@${PGVERSION}/lib"
+        export CPPFLAGS="-I/usr/local/opt/postgresql@${PGVERSION}/include"
+    fi
+fi
+switch_postgres $PGVERSION &>/dev/null
 
 # Perl 5 - can't remember what this was required for... keep it for now.
 if test ! -z "${USING_PERL}"; then
