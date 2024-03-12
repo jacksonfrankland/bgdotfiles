@@ -79,3 +79,5 @@ type mcfly &>/dev/null && eval "$(mcfly init bash)"
 . "$HOME/.cargo/env"
 
 source /Users/jacksonfrankland/.config/broot/launcher/bash/br
+
+eval "$(starship init bash)"
