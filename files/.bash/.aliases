@@ -5,7 +5,7 @@
 alias rm='rm -i'
 
 # alternatives
-alias ll='exa --long --header --git -a'
+alias ll='eza --long --header --git -a'
 alias cat='bat'
 alias vim='nvim'
 
