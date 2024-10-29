@@ -55,7 +55,6 @@ export VAGRANT_DEFAULT_PROVIDER="${VAGRANT_DEFAULT_PROVIDER:-vmware_fusion}"
 export PGHOST="${PGHOST:-localhost}"
 export PGUSER="${PGUSER:-postgres}"
 export PGDATABASE="${PGDATABASE:-postgres}"
-export PGVERSION="${SWITCHED_PGVERSION:-${PGVERSION:-9.5}}" # this is not a standard PG ENV VAR
 
 
 # =============================================================================
@@ -63,31 +62,13 @@ export PGVERSION="${SWITCHED_PGVERSION:-${PGVERSION:-9.5}}" # this is not a stan
 # Developer Workspace
 export WORKSPACE="${WORKSPACE:-$HOME/Workspace}"
 
-
-
-# PHP Laravel Valet
-# PHP_EXTENSIONS Used in custom bash function 'switch_php'
-export PHP_EXTENSIONS="${PHP_EXTENSIONS:-shivammathur/extensions/redis shivammathur/extensions/apcu shivammathur/extensions/memcached shivammathur/extensions/mongodb shivammathur/extensions/imagick shivammathur/extensions/xdebug shivammathur/extensions/imap shivammathur/extensions/msgpack shivammathur/extensions/igbinary}"
-# from shivammathur/extensions/imagickexport PHP_EXTENSIONS="${PHP_EXTENSIONS:-shivammathur/extensions/redis shivammathur/extensions/apcu shivammathur/extensions/memcached shivammathur/extensions/mongodb shivammathur/extensions/imagick shivammathur/extensions/xdebug shivammathur/extensions/imap shivammathur/extensions/msgpack shivammathur/extensions/igbinary}" # from shivammathur/extensions/imagick
-
-# Used for automatic nvm switching
-export PROMPT_COMMAND="$PROMPT_COMMAND; enter_directory"
-
-# Check for custom built frankenphp
-FRANKENPATH="${FRANKENPATH:-/Users/theodickinson/Workspace/frankenphp/frankenphp}"
-if [ -e "${FRANKENPATH}/dist" ]; then
-    export PATH="${FRANKENPATH}/dist:$PATH"
-fi
-
-# Postgres - align to linux and connect as postgres by default
-if [ false ]; then
-    if test -e /usr/local/opt/postgresql@${PGVERSION}; then
-        export PATH="/usr/local/opt/postgresql@${PGVERSION}/bin:$PATH"
-        export LDFLAGS="-L/usr/local/opt/postgresql@${PGVERSION}/lib"
-        export CPPFLAGS="-I/usr/local/opt/postgresql@${PGVERSION}/include"
+if eval false; then
+    # Check for custom built frankenphp
+    FRANKENPATH="${FRANKENPATH:-${WORKSPACE}/frankenphp/frankenphp}"
+    if [ -e "${FRANKENPATH}/dist" ]; then
+        export PATH="${FRANKENPATH}/dist:$PATH"
     fi
 fi
-switch_postgres $PGVERSION &>/dev/null
 
 # Perl 5 - can't remember what this was required for... keep it for now.
 if test ! -z "${USING_PERL}"; then
@@ -117,10 +98,11 @@ if test -d "$HOME/.jenv/versions"; then
     export PATH="$HOME/.jenv/bin:$PATH"
 fi
 
-# lvim
-if test -e "$HOME/.local/bin/lvim"; then
-    export PATH="$HOME/.local/bin:$PATH"
+# Python Version Manager
+if test -d "$HOME/.pyenv"; then
+    export PYENV_ROOT="$HOME/.pyenv"
 fi
+
 # MacPorts Installer : adding an appropriate PATH variable for use with MacPorts.
 export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
 

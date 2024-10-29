@@ -54,12 +54,14 @@ brew 'mailhog', restart_service: true
 brew 'mas'
 brew 'nginx'
 brew 'nvm'
+brew orbstack
 # brew 'php@8.0'
 brew 'pnpm'
 # brew 'postgresql@9.5' - using mcaports version as no longer available
 # brew 'pnpm'  # curl -fsSL https://get.pnpm.io/install.sh | env PNPM_VERSION=6.32.1  sh -
 brew 'redis@6.2', restart_service: true, link: true, conflicts_with: ["redis"]
 brew 'rbenv'
+brew 'pyenv'
 brew 'ruby'
 brew 'pstree'
 brew 'ripgrep'

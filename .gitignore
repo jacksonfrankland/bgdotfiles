@@ -1,4 +1,6 @@
 files/.DS_Store
 .DS_Store
+/.idea/.gitignore
+/.idea/*
 
 files/.bash/.adhoc

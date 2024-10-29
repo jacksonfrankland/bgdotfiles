@@ -22,6 +22,36 @@ sedi=(-i) && [ "$(uname)" == "Darwin" ] && sedi=(-i '')
 # `less` with options to preserve color and line numbers, unless the output is
 # small enough for one screen.
 
+
+function enter_directory() {
+    # use this function in the PROMPT_COMMAND to auto execute when changing into a directory.
+    # e.g. export PROMPT_COMMAND="$PROMPT_COMMAND; enter_directory"
+
+	if [[ $PWD == $PREV_PWD ]]; then
+		return
+	fi
+
+	PREV_PWD=$PWD
+
+	if [ -f .enter ]; then
+	    # look in current directory for a .enter script to run and return
+	    source .enter
+	    return
+    fi
+
+    # default behaviour when
+
+    # Use correct node version AND use latest compatible NPM
+	[[ -f ".nvmrc" ]] && nvm use || true
+
+    # set local PATH to use PHP as defined in .valetphprc
+    type php_cli_from_valet &>/dev/null && php_cli_from_valet || true
+
+    [ -f "package.json" -o -f ".nvmrc" ] && {
+        [ "$(npm -v | cut -d. -f1)" -lt 8 ] && echo "Suggest: upgrade npm with 'npm install -g npm@latest'"
+    }
+}
+
 function tre() {
 	tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX;
 }
@@ -107,14 +137,6 @@ function kill_port () {
 }
 
 
-function postgres_dev_init() {
-    # after fresh install of postgres - setup basics
-    if test ! -z "$PGUSER"; then
-        createuser -s ${$PGUSER}
-    fi
-}
-
-
 function what_port() {
 
 	# macOs - what app is running on a port
@@ -138,7 +160,7 @@ function what_port() {
 	    echo "PORT '$port' on localhost has a process listening"
 
         # find ps for port
-	    pids=$(netstat -anv | awk '{print $4","$9}' | grep "\.$port," | cut -d, -f2 | uniq | xargs)
+	    pids=$(netstat -anv | awk '{print $4","$11}' | grep "\.$port," | cut -d, -f2 | uniq | xargs)
         # find parent id (exclude 0 or 1 for launchd)
 	    ppids=$(ps -o ppid -p $pids | tail -n +2 | grep -v 1 | xargs || true)
 	    #
@@ -411,7 +433,7 @@ _sf_dep() {
     local sf_cmd="${COMP_WORDS[0]}"
 
     # for an alias, get the real script behind it
-    sf_cmd_type=$(type -t $sf_cmd)
+    sf_cmd_type=$(type $sf_cmd)
     if [[ $sf_cmd_type == "alias" ]]; then
         sf_cmd=$(alias $sf_cmd | sed -E "s/alias $sf_cmd='(.*)'/\1/")
     elif [[ $sf_cmd_type == "file" ]]; then
@@ -565,7 +587,7 @@ function launchSmartGit() {
 	dir="${1:-$(pwd)}"
 
 	if [ ! -d ${dir} ]; then
-		echo -e "$(echo_color red)'${dir}' is not a valid directory.${echo_normal}"
+		echo -e "$RED'${dir}' is not a valid directory.$NC"
 		return 1
 	fi
 
@@ -575,7 +597,7 @@ function launchSmartGit() {
 		local app="/Applications/SmartGit.app/Contents/MacOS/SmartGit"
 		nohup "${app}" --log "${1}" &>/dev/null &
 	else
-		echo -e "$(echo_color red)'${dir}' is not a GIT directory.${echo_normal}"
+		echo -e "$RED'${dir}' is not a GIT directory.$NC"
 	fi
 
 	popd 1>/dev/null
